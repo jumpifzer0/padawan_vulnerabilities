@@ -1,0 +1,20 @@
+To Be Done by Jz
+
+https://github.com/cheese-hub/Heap-Overflow
+
+gcc -O0 -g -fno-stack-protector -fno-pic -D_FORTIFY_SOURCE=0 -o simple_heapvoerflow.exe simple_heapoverflow.c
+
+
+-O0: This flag tells GCC to disable optimizations. Without optimizations, the code will be compiled exactly as you wrote it, making debugging and analysis easier.
+
+-g: Includes debugging information to help if you need to analyze the program in a debugger.
+
+-fno-stack-protector: Disables stack protection, which normally adds guard values to detect stack overflows.
+
+[In windows, dont have this option]
+-z noexecstack: Disables non-executable stack. This is relevant if you want to test shellcode injection, but it's good practice to disable it for studying overflows in a controlled environment.
+
+-fno-pic: Disables position-independent code, which can sometimes provide added security by randomizing memory locations.
+
+-D_FORTIFY_SOURCE=0: Disables additional buffer overflow protections that may be enabled by default in newer versions of GCC (like memcpy and strcpy safety checks).
+
