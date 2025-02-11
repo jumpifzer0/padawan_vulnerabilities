@@ -2,12 +2,15 @@
 #include <string.h>
 #include <stdio.h>
 
+
 struct special_struct {
     int var1;
     char *var2; 
 };
 
+
 void print_struct(struct special_struct *input_struct){
+    printf("[Book Info] \n");
     printf("var1 : %d \n", input_struct->var1);
     printf("var2 : %s \n", input_struct->var2);
 }
@@ -19,35 +22,68 @@ void free_struct(struct special_struct *input_struct){
     free(input_struct);
 }
 
+
 void print_options(){
-    printf("print options loan and return");
+    printf("===============\n");
+    printf("[Options] \n"
+           " [1] Show Loaned Book \n"
+           " [2] Loan Book \n"
+           " [3] Return Book \n"
+           " [4] Give Feed Back \n"
+           " [5] Exit \n"
+    );
+    printf("===============\n");
 }
 
+// jz notes 
+// possible case to cause use-after-free
+// loan book -> return book -> give feed back -> print book
+
+// can consider, if want to make it easily exploitable, change one of the variables to a address pointer. Then user can exploit using address.
 int main(int argc, char **argv){
-    // jz notes 
-    // can make like a library(?) system that loan(malloc) and returns(free)
-    
+        
     int selection = 0;
-    struct special_struct cart[8];
+    struct special_struct* loanedBook;
 
-
-    // print options
-    // get user input
-    // do action
-    // repeat until case 3
     while(selection != 10){
 
         print_options();
-
+        printf("Please input the value that you would like to do\n");
         scanf("%d", &selection);
+
+        // This is needed to clear the buffer, so that \n is removed for fgets to work.
+        // flushes stdin
+        while(getchar() != '\n');
+
         switch(selection){
             case 1:
-                printf("1");
+                print_struct(loanedBook);
                 break;
             case 2:
-                printf("2");
+                loanedBook = malloc(sizeof(struct special_struct));
+                loanedBook->var2 = malloc(256);
+
+                printf("What is var1 : ");
+                scanf("%d", &loanedBook->var1);
+
+                // This is needed to clear the buffer, so that fgets can work.
+                while(getchar() != '\n');
+
+                printf("What is var2 : ");
+                fgets(loanedBook->var2, 256, stdin);
+
+                printf("Book Loaned \n");
+                break;
             case 3:
-                printf("exit");
+                free_struct(loanedBook);
+                break;
+            case 4:
+                char *feedback = malloc(256);
+                printf("Please Provide your feedback below \n");
+                fgets(feedback, 256, stdin);
+                break;
+            case 5:
+                printf("Exit");
                 selection = 10;
             
         }
