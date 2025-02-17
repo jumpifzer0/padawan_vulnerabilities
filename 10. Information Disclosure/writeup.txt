@@ -1,0 +1,7 @@
+can use srand to generate numbers and then ask the user to match inputs
+
+so the program is a crud application.
+
+then it will allow the user to modify the values. it would have an arbitary read.
+
+

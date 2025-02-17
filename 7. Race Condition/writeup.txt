@@ -1,0 +1,14 @@
+The problem statement is that given 100 tokens, purchase 500 items.
+
+the solution is to paste the inputs here into the windows app:
+
+100
+89
+78
+67
+56
+45
+34
+23
+12
+1

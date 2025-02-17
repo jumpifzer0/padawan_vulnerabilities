@@ -1,0 +1,9 @@
+First we would use ida to find out the address of the vuln fn, which is 401460.
+
+then use metasploit pattern to check out the offset that we need.
+
+afterthat we place the address into the return value. Then we can go into the if clause.
+
+Based on the metasploit pattern, we know that the return address is at 112th character. so we put the address there to get the soln.
+
+

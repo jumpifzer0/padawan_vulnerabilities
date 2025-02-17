@@ -1,0 +1,4 @@
+first put in the value -11
+then continue with the 8589934577 which is 2^32-15.
+the globin health will then have a health of 1.
+use up the turn to attack the globin and the task would be completed.

@@ -1,0 +1,11 @@
+First use ida to find out the function pointers of the values:
+what we are concerned is function0, function1 and function2.
+The addresses of these functions are: 0x401460,0x401498, 0x4014c4 and 0x4014f0.
+Based on the code, we can only place positive numbers.
+So to jump to the necessary functions, we can use the binary form of the negative number to perform the jumps.
+
+First we calculate that the difference between main and function2 has a difference of 0x2C, so we would need to create the value of negative 0x2C, and the positive value of the binary, which is 212.
+Then from function2 to function 1 is the same.
+Lastly is from function1 to function0, which has a difference of 0x38 so we would need to create the value of negative -0x38, and the positive value of binary, which is 200.
+
+With that challenge has been completed.
