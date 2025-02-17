@@ -11,14 +11,23 @@ To increase difficulty, can consider implement DEP/ASLR
 ```
 
 [yz] 1. (Linear) Stack Buffer Overflow 
+
 [jz] 2. (Linear) Heap Buffer Overflow
+
 [jz] 3. (Non-Linear) Out-Of-Bounds Writes (OOB-W)
+
 [yz] 4. Integer Overflow / Underflow
+
 [yz] 5. Other Integer Issues
+
 [jz] 6. Uninitialized Data Access
+
 [yz] 7. Race Condition
+
 [jz] 8. Use-After-Free
+
 [jz] 9. Type Confusion
+
 [yz] 10. Information Disclosure 
 
 ## Repo Structure
