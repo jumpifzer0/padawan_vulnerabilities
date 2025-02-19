@@ -11,7 +11,7 @@ int main(int argc, char **argv){
         
     
     char *buf;
-    buf = (char *)malloc(sizeof(char) * 256);
+    buf = (char *)malloc(sizeof(char) * 64);
     strcpy(buf, argv[1]);
 
     // jz : Theory is that, the user input may overflow the malloc-ed allocation.

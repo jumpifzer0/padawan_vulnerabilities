@@ -18,3 +18,10 @@ gcc -O0 -g -fno-stack-protector -fno-pic -D_FORTIFY_SOURCE=0 -o simple_heapvoerf
 
 -D_FORTIFY_SOURCE=0: Disables additional buffer overflow protections that may be enabled by default in newer versions of GCC (like memcpy and strcpy safety checks).
 
+
+000001B626D53F10 -> 000001B626D5B410 -> Some kind of location that contains the file directory
+
+000001B626D53F18 -> 000001b626d56f60 -> This contains all the A's
+===========================
+Address of malloc result
+000001B626D5B490
