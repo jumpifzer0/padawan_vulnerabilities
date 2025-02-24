@@ -1,0 +1,3 @@
+The goal of this challenge is to make use of Integeroverflow vulnerability to get the globin health to 0. 
+Given the current circumstances the player could not reduce the globin's health in 1 turn. 
+Use your magic and knowledge to make this happen and take down the globin in 1 hit.

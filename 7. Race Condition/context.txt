@@ -1,0 +1,5 @@
+The goal of this challenge is to make use of race condition vulnerability to "buy" more items than the allowed amount. 
+With this vulnerability, it would be possible to purchase more items given the 100 starting tokens. 
+The token will only be consumed when the item is created and therefore there would be a TOCTOU problem.
+
+Get at least 500 items so that flag can then be printed on the console.

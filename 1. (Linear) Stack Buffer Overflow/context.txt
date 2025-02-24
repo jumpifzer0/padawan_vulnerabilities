@@ -1,0 +1,3 @@
+The purpose of this challenge is to print the flag onto the console. 
+It has the vulnerable gets function. 
+Find out how to make use of this function to get a flag. Hint: use ida to get the function address.
