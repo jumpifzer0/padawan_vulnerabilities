@@ -132,7 +132,7 @@ void main(){
             case '2':
             printf("Here are your values: 1. %d 2. %d 3. %d 4. %d\n",data[0],data[1],data[2],data[3]);
             if (submit(buffer,data) == 1){
-                printf("challenge solved!\n");
+                printf("flag{informationdisclosure}\n");
                 
             } else{
                 printf("incorrect values!\n");

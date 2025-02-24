@@ -3,7 +3,7 @@
 
 
 typedef struct {
-    unsigned int health;
+    int health;
     int attack;
     int defense;
     char accuracy;
@@ -49,7 +49,7 @@ void main(){
         printf("3.skip a turn\n");
         printf("4. retreat\n");
         char health_input[100];
-        unsigned int health = 0;
+        int health = 0;
         char input[5];
         int action;
         fgets(input, sizeof(input),stdin);
@@ -86,20 +86,20 @@ void main(){
                     printf("health cannot be negative or health addition is too low!\n");
                     break;
                 }
-                globin->health = (15 + (unsigned int)health > 1) ? 15 + (unsigned int)health:1 ;
+                globin->health = (15 + health) > 1 ? 15 + health:1 ;
                 break;
             default:
-                printf("invalid action! %d\n",action);
+                printf("invalid action!\n");
                 break;
         }
 
         if (globin->health <= 0){
             printf("completed! flag{integeroverflow}\n");
-            exit(0);
+            break;
 
         } else if (player->player_turn <= 0){
             printf("failed!\n");
-            exit(0);
+            break;
         }
     }
 }
