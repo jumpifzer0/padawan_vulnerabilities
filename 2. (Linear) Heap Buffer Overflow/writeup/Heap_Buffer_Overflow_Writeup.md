@@ -81,8 +81,8 @@ To note, Jz says that this might be due to a compiler thing, we might consider c
 
 #### Step 4 : Proof that the heap has with more characters than expected
 To visually identify that the vulnerability has been triggered, a couple steps are required to be done. 
-- Breakpoint before strcpy
-- Breakpoint after strcpy
+- Check the contents of the heap before strcpy
+- Check the contents of the heap after strcpy
 
 We must first step through to the point where the arugments for **strcpy**  are setup. From there we can identify the memory location that is in use to copy the user input into. This can be identified by the line ``` ```
 
