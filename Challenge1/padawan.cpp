@@ -5,6 +5,33 @@
 #include <WinSock2.h>
 static WSADATA wsaData;
 
+#define BUF_SIZE 1024
+#define BUF_SIZE_W_PADDING 1024+8
+
+
+char* formatMsg(char* buffer){
+    // add the word padawan at the front
+    const char* input = "padawan_";
+    char* newBuffer = new char[BUF_SIZE_W_PADDING];
+    for (int i = 0; i< strlen(input); i++){
+        newBuffer[i] = input[i];
+    }
+    // copy the buffer values into the new buffer and return the new buffer
+    strncpy(newBuffer+strlen(input),buffer,BUF_SIZE);
+    return newBuffer;
+}
+//Caution: Free after using the data to save memory
+bool validateMsg(char* buffer){
+    const char* input = "padawan_";
+    return strncmp(input,buffer,strlen(input)) == 0;
+}
+//Caution: Free after using the data to save memory
+char* parseMsg(char* buffer){
+    // return some char
+    char* newBuffer = new char[BUF_SIZE];
+    strncpy(newBuffer,buffer+8,BUF_SIZE);
+    return newBuffer;
+}
 // Initializes Winsock
 int  InitWinsock() {
     int result = WSAStartup(MAKEWORD(2, 2), &wsaData);

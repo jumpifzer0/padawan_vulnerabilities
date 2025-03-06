@@ -23,15 +23,12 @@
 */
 
 
-// char* FormatMsg(char* msg);
+extern "C" PADAWAN_API char* formatMsg(char* msg);
 
-// bool ValidateMsg(char* msg);
+extern "C" PADAWAN_API bool validateMsg(char* msg);
 
-// void Connect();
+extern "C" PADAWAN_API char* parseMsg(char* msg);
 
-// void Disconnect();
-
-extern "C" void CALL testfunction();
 
 #include <winsock2.h>
 

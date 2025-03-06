@@ -15,6 +15,7 @@
 #define SERVER_PORT 8080
 #define BACKLOG 5  // Max pending connections
 #define BUF_SIZE 1024
+#define BUF_SIZE_W_PADDING 1024+8
 
 using namespace std;
 
@@ -54,7 +55,7 @@ public:
 
 void handle_client(SOCKET client_socket, MessageQueue *mq){
     if (debug) printf("client thread created!\n");
-    char recvBuffer[BUF_SIZE];
+    char recvBuffer[BUF_SIZE_W_PADDING];
     int recv_size;
     if (debug) printf("going to lock the set for client input!\n");
     unique_lock<mutex> lock(clients_mutex); 
@@ -71,6 +72,7 @@ void handle_client(SOCKET client_socket, MessageQueue *mq){
         int recv_size = ReceiveData(client_socket, recvBuffer, sizeof(recvBuffer) - 1);
         if (recv_size > 0) {
             recvBuffer[recv_size] = '\0';  // Null-terminate the string
+            
             printf("Received from client: %s\n", recvBuffer);
         }
         if (recv_size == 0){
@@ -82,16 +84,19 @@ void handle_client(SOCKET client_socket, MessageQueue *mq){
             // remove client from set if client is not connected anymore
             unique_lock<mutex> lock(clients_mutex); 
             clients.erase(client_socket); 
+            lock.unlock();
         } else{
-            c = new char[BUF_SIZE];
+            // check if it is in the correct format:
+            if (!validateMsg(recvBuffer)){
+                continue;
+            }
+            c = new char[BUF_SIZE_W_PADDING];
             // copy data from buffer to here before putting into queue
-            strncpy(c,recvBuffer,BUF_SIZE);
+            strncpy(c,recvBuffer,BUF_SIZE_W_PADDING);
             mp.message = c;
-            mq->enqueue(mp); // TODO: check if this works and will not replace the data in the queue
+            mq->enqueue(mp); 
         }
-        // TODO
-        // get the data from the user and then add it to a queue. 
-        // based on the size 
+
     }
 
 }
@@ -103,6 +108,7 @@ void handle_messages(MessageQueue* mq){
     while (true){
         // consume message from the queue
         data = mq->dequeue();
+        if (debug) printf("This is what is received in data! %s\n",data.message);
         unique_lock<mutex> lock(clients_mutex);
         for (it= clients.begin(); it != clients.end(); ++it) {
             if (*it != data.sock){
