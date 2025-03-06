@@ -22,7 +22,6 @@ void free_struct(struct special_struct *input_struct){
     free(input_struct);
 }
 
-
 void print_options(){
     printf("===============\n");
     printf("[Options] \n"
