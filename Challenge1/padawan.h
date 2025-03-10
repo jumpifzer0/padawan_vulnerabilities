@@ -23,11 +23,13 @@
 */
 
 
-extern "C" PADAWAN_API char* formatMsg(char* msg);
+extern "C" PADAWAN_API void formatMsg(char* src, char* dest);
 
 extern "C" PADAWAN_API bool validateMsg(char* msg);
 
-extern "C" PADAWAN_API char* parseMsg(char* msg);
+extern "C" PADAWAN_API void parseMsg(char* src,char* dest);
+
+
 
 
 #include <winsock2.h>
@@ -62,6 +64,10 @@ extern "C" PADAWAN_API char* parseMsg(char* msg);
 
 	// Close a socket
 	extern "C" PADAWAN_API void  CloseSocket(SOCKET sock);
+
+	extern "C" PADAWAN_API void printCharArray(char* src);
+
+	extern "C" PADAWAN_API void assemblycode();
 
 // #ifdef __cplusplus
 // }

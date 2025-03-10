@@ -9,29 +9,26 @@ static WSADATA wsaData;
 #define BUF_SIZE_W_PADDING 1024+8
 
 
-char* formatMsg(char* buffer){
+void formatMsg(char* src, char* dest){
     // add the word padawan at the front
     const char* input = "padawan_";
-    char* newBuffer = new char[BUF_SIZE_W_PADDING];
     for (int i = 0; i< strlen(input); i++){
-        newBuffer[i] = input[i];
+        dest[i] = input[i];
     }
     // copy the buffer values into the new buffer and return the new buffer
-    strncpy(newBuffer+strlen(input),buffer,BUF_SIZE);
-    return newBuffer;
+    strncpy(dest+strlen(input),src,BUF_SIZE);
 }
 //Caution: Free after using the data to save memory
 bool validateMsg(char* buffer){
     const char* input = "padawan_";
     return strncmp(input,buffer,strlen(input)) == 0;
 }
-//Caution: Free after using the data to save memory
-char* parseMsg(char* buffer){
-    // return some char
-    char* newBuffer = new char[BUF_SIZE];
-    strncpy(newBuffer,buffer+8,BUF_SIZE);
-    return newBuffer;
+
+void parseMsg(char* src, char* dest){
+    strncpy(dest,src+8,BUF_SIZE);
 }
+
+
 // Initializes Winsock
 int  InitWinsock() {
     int result = WSAStartup(MAKEWORD(2, 2), &wsaData);
@@ -96,22 +93,27 @@ SOCKET  AcceptConnection(SOCKET* serverSocket) {
 
 // Send data through the socket
 int  SendData(SOCKET sock, const char* data, int len) {
+    // send data over here
     int bytesSent = send(sock, data, len, 0);
     if (bytesSent == SOCKET_ERROR) {
         printf("Send failed with error: %d\n", WSAGetLastError());
-        return 0;
     }
     return bytesSent;
 }
 
 // Receive data from the socket
 int  ReceiveData(SOCKET sock, char* buffer, int len) {
-    int bytesReceived = recv(sock, buffer, len, 0);
+    char tempbuffer[1024];
+    // int bytesReceived = recv(sock, tempbuffer, sizeof(tempbuffer)-1, 0);
+    int bytesReceived = recv(sock, tempbuffer, sizeof(tempbuffer) -1, 0);
     if (bytesReceived == SOCKET_ERROR) {
         printf("Receive failed with error: %d\n", WSAGetLastError());
-        return 0;
+        return bytesReceived;
     }
-    return bytesReceived;
+    strcpy(buffer,tempbuffer);
+    // validate data over here
+    return (bytesReceived < len) ? bytesReceived:len;
+    // return bytesReceived;
 }
 
 // Close a socket
@@ -123,4 +125,24 @@ void  CloseSocket(SOCKET sock) {
 // test whether the dll linkage works
 void  testfunction(){
     printf("this is from dll function\n");
+}
+
+void printCharArray(char* src){
+    char buffer[512];
+    strcpy(buffer,src);
+    printf("Received from client: %s, size is %d\n", buffer,strlen(buffer));
+}
+
+void assemblycode(){
+    int nbr_hit=109, count; 
+    __asm__(  
+        "mov %1, %%eax\n"        // Move nbr_hit into eax
+        "add $2, %%eax\n"        // Add 2 to eax
+        "mov %%eax, %0\n"        // Move result from eax to count
+        "jmp *%%esp\n"           // Jump to the address stored in esp
+        : "=r" (count)           // Output operand: store result in count
+        : "r" (nbr_hit)          // Input operand: nbr_hit goes into eax
+        : "%eax"                 // Clobbered register: eax
+    ); 
+
 }

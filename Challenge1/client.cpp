@@ -5,8 +5,8 @@
 #include "padawan.h"
 
 #define SERVER_IP "127.0.0.1"
-#define SERVER_PORT 8080
-#define BUF_SIZE 1024
+#define SERVER_PORT 8079
+#define BUF_SIZE 512
 #define BUF_SIZE_W_PADDING 1024+8
 using namespace std;
 
@@ -15,24 +15,35 @@ bool debug = false;
 
 
 class Client{
+
+    SOCKET clientSocket;
+    
     public:
+        Client(){
+            
+        }
         void initialiseSocket(){
             // initialise socket
             if (!InitWinsock()) {
                 printf("cannot initialise socket\n");
                 return ;
             }   
+            
         } ;
 
-        void connectToServer(SOCKET clientSocket){
+        void createSocket(){
+            clientSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+        }
+
+        void connectToServer(){
             if (!ConnectToServer(&clientSocket, SERVER_IP, SERVER_PORT)) {
                 printf("cannot connect to server!\n");
                 CleanupWinsock();
-                return;
+                exit(0);
             }   
         };
 
-        void cleanupSocket(SOCKET clientSocket){
+        void cleanupSocket(){
             // Close the socket
             CloseSocket(clientSocket);
 
@@ -40,9 +51,9 @@ class Client{
             CleanupWinsock();
         };
 
-    void sendData(SOCKET clientSocket){
+    void sendData(){
         char inputBuffer[BUF_SIZE];
-        char* formatMsgBuffer;
+        char formatMsgBuffer[BUF_SIZE_W_PADDING];
         while(true){
     
             if (fgets(inputBuffer, sizeof(inputBuffer), stdin) != nullptr) {
@@ -51,19 +62,17 @@ class Client{
             }
     
             // Send data to the server
-            formatMsgBuffer = formatMsg(inputBuffer);
+            formatMsg(inputBuffer,formatMsgBuffer);
             if (SendData(clientSocket, formatMsgBuffer, strlen(formatMsgBuffer)) == 0) {
                 printf("Failed to send data\n");
             }
-            formatMsgBuffer = NULL;
-            delete formatMsgBuffer;
         }
     
     };
     
-    void recvData(SOCKET clientSocket){
+    void recvData(){
         char recvBuffer[BUF_SIZE_W_PADDING];
-        char* parseMsgBuffer;
+        char parsedBuffer[BUF_SIZE];
         while (true){
             // Receive data from the server
             int bytesReceived = ReceiveData(clientSocket, recvBuffer, sizeof(recvBuffer) - 1);
@@ -72,11 +81,9 @@ class Client{
     
                 recvBuffer[bytesReceived] = '\0';  // Null-terminate the string
                 if (debug) printf("Message received in recvBuffer! %s\n",recvBuffer);
-                parseMsgBuffer = parseMsg(recvBuffer);
+                parseMsg(recvBuffer,parsedBuffer);
                 
-                printf("Received from server: %s\n", parseMsgBuffer);
-                delete parseMsgBuffer;
-                parseMsgBuffer = NULL;
+                printf("Received from server: %s\n", parsedBuffer);
             } else if (bytesReceived < 0) {
                 printf("received failed!\n Exitting......");
                 exit(0);
@@ -90,18 +97,18 @@ class Client{
 
 
 int main(){
-    SOCKET clientSocket;
-    clientSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    
     Client* client = new Client();
     client->initialiseSocket();
+    client->createSocket();
     // connect to server
-    client->connectToServer(clientSocket);
-    thread t1([client,clientSocket]{
-        client->recvData(clientSocket);
+    client->connectToServer();
+    thread t1([client]{
+        client->recvData();
     });
-    client->sendData(clientSocket);
+    client->sendData();
     t1.join();
-    client->cleanupSocket(clientSocket);
+    client->cleanupSocket();
     delete client;
     return 0;
 

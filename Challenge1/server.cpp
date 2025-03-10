@@ -12,14 +12,14 @@
 #include <set>
 
 #define SERVER_IP "127.0.0.1"  // Localhost
-#define SERVER_PORT 8080
+#define SERVER_PORT 8079
 #define BACKLOG 5  // Max pending connections
 #define BUF_SIZE 1024
 #define BUF_SIZE_W_PADDING 1024+8
 
 using namespace std;
 
-bool debug = false;
+bool debug = true;
 set<SOCKET> clients; 
 mutex clientsMutex; 
 
@@ -77,16 +77,17 @@ class Server{
         char *c;
         while (true){
             if (debug) printf("trying to receive data from cient!\n");
-            int recv_size = ReceiveData(clientSocket, recvBuffer, sizeof(recvBuffer) - 1);
+            int recv_size = ReceiveData(clientSocket, recvBuffer, sizeof(recvBuffer)-1); //TODO:
             if (recv_size > 0) {
                 recvBuffer[recv_size] = '\0';  // Null-terminate the string
                 
-                printf("Received from client: %s\n", recvBuffer);
+                printCharArray(recvBuffer);
             }
             if (recv_size == 0){
                 unique_lock<mutex> lock(clientsMutex); 
                 clients.erase(clientSocket); 
                 lock.unlock();
+                exit(0);
     
             } else if (recv_size == SOCKET_ERROR){
                 unique_lock<mutex> lock(clientsMutex); 
@@ -158,9 +159,12 @@ class Server{
     }
 
     void acceptClientConnections(){
+        printf("server can start accepting connections!\n");
         while (true){
             // Accept a connection from a client
+            printf("server can start accepting connections!\n");
             clientSocket = AcceptConnection(&serverSocket);
+            printf("connection accepted!\n");
             if (clientSocket == INVALID_SOCKET) {
                 continue;
             }
