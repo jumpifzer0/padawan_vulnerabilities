@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.10)
 project(Vulnerable_ChatServer)
 
+# Ensure static linking
+set(CMAKE_EXE_LINKER_FLAGS "-static")
+
 # Set output directory for binaries
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 

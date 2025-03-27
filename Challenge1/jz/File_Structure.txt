@@ -9,7 +9,7 @@ padawan_dll
 --> padawan.cpp
 --> padawan.h
 server
---> base_listening_server.cpp
+--> base_listening_server.cpp 
 --> base_listening_server.h
 --> ChatServer.cpp
 --> ChatServer.h
@@ -17,9 +17,8 @@ server
 --> MessageQueue.cpp
 --> MessageQueue.h
 
-Steps to compile:
-1) Make sure the above file structure is in place and their respective CMakeLists.txt are there.
-2) create a "build" directory
-3) cd into the "build" directory
-4) cmake .. -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER=g++
-5) cmake --build . --config Release
+Steps to replicate creation:
+1) Setup CMakeLists.txt files.
+2) cd build 
+3) cmake .. -G "MinGW Makefiles" -DCMAKE_CXX_COMPILER="g++.exe"
+4) cmake --build . --config Release

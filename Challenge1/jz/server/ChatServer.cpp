@@ -56,7 +56,10 @@ void ChatServer::handleClient(SOCKET clientSocket, MessageQueue *mq){
             unique_lock<mutex> lock(clientsMutex); 
             clients.erase(clientSocket); 
             lock.unlock();
-        } else{
+            printf("Client Left \n");
+            break;
+            
+        } else {
             if (!validateMsgHeader(recvBuffer)){
                 continue;
             }
