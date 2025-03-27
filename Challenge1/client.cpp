@@ -103,10 +103,15 @@ int main(){
     client->createSocket();
     // connect to server
     client->connectToServer();
+
+    // Another thread to handle incoming data.
     thread t1([client]{
         client->recvData();
     });
+
+    // This continues as a while loop in the main thread
     client->sendData();
+    
     t1.join();
     client->cleanupSocket();
     delete client;

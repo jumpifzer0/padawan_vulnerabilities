@@ -1,5 +1,3 @@
-// #include "pch.h"
-
 #include "padawan.h"
 #include <stdio.h>
 #include <WinSock2.h>
@@ -19,7 +17,7 @@ void formatMsg(char* src, char* dest){
     strncpy(dest+strlen(input),src,BUF_SIZE);
 }
 //Caution: Free after using the data to save memory
-bool validateMsg(char* buffer){
+bool validateMsgHeader(char* buffer){
     const char* input = "padawan_";
     return strncmp(input,buffer,strlen(input)) == 0;
 }
@@ -87,9 +85,9 @@ int  ListenForConnections(SOCKET* sock, int backlog=0) {
 SOCKET  AcceptConnection(SOCKET* serverSocket) {
     SOCKET clientSocket;
     clientSocket = accept(*serverSocket, NULL, NULL);
-    if (clientSocket == INVALID_SOCKET) {
-        printf("Accept failed with error: %d\n", WSAGetLastError());
-    }
+    //if (clientSocket == INVALID_SOCKET) {
+    //    printf("Accept failed with error: %d\n", WSAGetLastError());
+    //}
     return clientSocket;
 }
 

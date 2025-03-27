@@ -89,7 +89,6 @@ int battle(int eevee_atk){
         cout << "[-] Your pokemon has fainted. Try again." << endl;
         return 0;
     }
-
 }
 
 
